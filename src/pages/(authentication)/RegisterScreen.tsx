@@ -53,6 +53,7 @@ const RegisterScreen = ({ navigation }: any) => {
 
   const onSubmit = async (data: IRegisterFormProps) => {
     const response = await register(data)
+    console.log(response)
     if (response) {
       setError('root', {
         type: 'manual',
@@ -69,7 +70,7 @@ const RegisterScreen = ({ navigation }: any) => {
   }
 
   return (
-    <ScrollView style={style.view}>
+    <ScrollView style={style.view} showsVerticalScrollIndicator={false} automaticallyAdjustKeyboardInsets>
       <View style={style.headerWrapper}>
         <Text style={style.header}>Sign Up</Text>
         <Text style={style.description}>Enter your details below & free sign up</Text>
@@ -237,9 +238,10 @@ const RegisterScreen = ({ navigation }: any) => {
             fontWeight: '600',
             fontSize: 20
           }}
+          _pressed={{ opacity: 0.8 }}
           onPress={handleSubmit(onSubmit)}
         >
-          Log In
+          Sign Up
         </Button>
         <Text style={{ paddingBottom: 50 }}>
           Already have an account?{' '}

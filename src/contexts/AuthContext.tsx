@@ -6,7 +6,6 @@ import { IUser } from '../interfaces/user.interface'
 import { IAuthContextProps, ILoginFormProps } from '../interfaces/auth.interface'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosError } from 'axios'
-import { boolean } from 'yup'
 
 const initialContext: IAuthContextProps = {
   user: {
@@ -115,7 +114,7 @@ const AuthProvider = ({ children }: { children: JSX.Element }) => {
   initialContext.logout = async () => {
     try {
       await AsyncStorage.removeItem('idToken')
-      const result = await POST('auth/customer/logout', {}, {}, {})
+      await POST('auth/customer/logout', {}, {}, {})
     } catch (error) {
       console.log(error)
     }

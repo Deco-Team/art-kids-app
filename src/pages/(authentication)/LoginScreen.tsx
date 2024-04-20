@@ -34,9 +34,7 @@ const LoginScreen = ({ navigation }: any) => {
   })
 
   const onSubmit = async (data: ILoginFormProps) => {
-    console.log(data)
     const result = await login(data)
-    console.log(result)
     if (result === false) {
       setError('root', {
         type: 'manual',
@@ -143,6 +141,7 @@ const LoginScreen = ({ navigation }: any) => {
             fontWeight: '600',
             fontSize: 20
           }}
+          _pressed={{ opacity: 0.8 }}
           onPress={handleSubmit(onSubmit)}
         >
           Log In

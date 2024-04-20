@@ -3,9 +3,11 @@ import useApi from './useApi'
 import React from 'react'
 import { GET, POST } from '@/src/utils/api.caller'
 import { AxiosError } from 'axios'
+import useAuth from '../useAuth'
 
 const useUser = () => {
   const callApi = useApi()
+  const { idToken } = useAuth()
   const registerEndpoint = 'auth/customer/register'
   const customerEndpoint = 'customer/me'
 
@@ -26,7 +28,7 @@ const useUser = () => {
 
   const getInfo = React.useCallback(async () => {
     try {
-      const response = await GET(customerEndpoint, {}, {})
+      const response = await callApi('get', customerEndpoint, { idToken }, {}, {})
       return response
     } catch (error) {
       console.log(error)
