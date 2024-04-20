@@ -6,7 +6,6 @@ import { IUser } from '../interfaces/user.interface'
 import { IAuthContextProps, ILoginFormProps } from '../interfaces/auth.interface'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AxiosError } from 'axios'
-import { boolean } from 'yup'
 
 const initialContext: IAuthContextProps = {
   user: {
@@ -59,7 +58,7 @@ const AuthProvider = ({ children }: { children: JSX.Element }) => {
         if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
           navigation.reset({
             index: 0,
-            routes: [{ name: 'Home' as never }]
+            routes: [{ name: 'HomeNavigation' as never }]
           })
         } else
           setUser({
@@ -72,13 +71,13 @@ const AuthProvider = ({ children }: { children: JSX.Element }) => {
       } catch (error) {
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Home' as never }]
+          routes: [{ name: 'HomeNavigation' as never }]
         })
       }
     } else {
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Home' as never }]
+        routes: [{ name: 'HomeNavigation' as never }]
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +100,7 @@ const AuthProvider = ({ children }: { children: JSX.Element }) => {
       console.log('Login successfully')
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Home' as never }]
+        routes: [{ name: 'HomeNavigation' as never }]
       })
       return true
     } catch (error) {
@@ -115,7 +114,7 @@ const AuthProvider = ({ children }: { children: JSX.Element }) => {
   initialContext.logout = async () => {
     try {
       await AsyncStorage.removeItem('idToken')
-      const result = await POST('auth/customer/logout', {}, {}, {})
+      await POST('auth/customer/logout', {}, {}, {})
     } catch (error) {
       console.log(error)
     }

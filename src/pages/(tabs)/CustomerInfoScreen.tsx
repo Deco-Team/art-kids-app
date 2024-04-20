@@ -1,5 +1,5 @@
 import { SafeAreaView, Text } from 'react-native'
-import useAuth from '../hooks/useAuth'
+import useAuth from '../../hooks/useAuth'
 import { Button } from 'native-base'
 
 const CustomerInfoScreen = () => {

@@ -8,14 +8,14 @@ import RegisterScreen from './src/pages/(authentication)/RegisterScreen'
 import HomeNavigation from './src/pages/HomeNavigation'
 import { Ionicons } from '@expo/vector-icons'
 import LoginRegisterScreen from './src/pages/(authentication)/LoginRegisterScreen'
-import AuthProvider, { AuthContext } from './src/contexts/AuthContext'
+import AuthProvider from './src/contexts/AuthContext'
 import 'core-js/stable/atob'
-import CustomerInfoScreen from './src/pages/CustomerInfo'
-import useAuth from './src/hooks/useAuth'
+import CustomerInfoScreen from './src/pages/(tabs)/CustomerInfoScreen'
+import { Text } from 'react-native'
 
 const Stack = createNativeStackNavigator()
 
-export default function App() {
+export default function App({ route }: any) {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
@@ -27,25 +27,15 @@ export default function App() {
             }}
           >
             <Stack.Screen
-              name='Home'
+              name='HomeNavigation'
               component={HomeNavigation}
               options={{
                 headerStyle: {
                   backgroundColor: '#3D5CFF'
                 },
                 headerLeft: () => {
-                  const navigation = useNavigation()
-                  const { idToken } = useAuth()
                   return (
-                    <IconButton
-                      icon={<Ionicons name='person' size={24} color='white' />}
-                      borderRadius={'full'}
-                      _pressed={{
-                        bg: 'transparent',
-                        opacity: 0.6
-                      }}
-                      onPress={() => navigation.navigate(!idToken ? ('LoginRegister' as never) : ('Info' as never))}
-                    />
+                    <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white', paddingLeft: 10 }}>Art Kids</Text>
                   )
                 },
                 headerRight: () => (
@@ -60,7 +50,28 @@ export default function App() {
                 )
               }}
             />
-            <Stack.Screen name='Details' component={DetailsScreen} />
+            <Stack.Screen
+              name='Details'
+              component={DetailsScreen}
+              options={{
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.goBack()}
+                    />
+                  )
+                },
+                headerTransparent: true
+              }}
+            />
             <Stack.Screen name='Info' component={CustomerInfoScreen} />
             <Stack.Screen
               name='LoginRegister'
@@ -71,10 +82,11 @@ export default function App() {
                   const navigation = useNavigation()
                   return (
                     <IconButton
+                      backgroundColor={'#ffffffa3'}
                       icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
                       borderRadius={'full'}
                       _pressed={{
-                        bg: 'transparent',
+                        bg: '#ffffffa3',
                         opacity: 0.6
                       }}
                       onPress={() => navigation.goBack()}
@@ -92,13 +104,14 @@ export default function App() {
                   const navigation = useNavigation()
                   return (
                     <IconButton
+                      backgroundColor={'#ffffffa3'}
                       icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
                       borderRadius={'full'}
                       _pressed={{
-                        bg: 'transparent',
+                        bg: '#ffffffa3',
                         opacity: 0.6
                       }}
-                      onPress={() => navigation.navigate('Home' as never)}
+                      onPress={() => navigation.navigate('HomeNavigation' as never)}
                     />
                   )
                 }
@@ -113,13 +126,14 @@ export default function App() {
                   const navigation = useNavigation()
                   return (
                     <IconButton
+                      backgroundColor={'#ffffffa3'}
                       icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
                       borderRadius={'full'}
                       _pressed={{
-                        bg: 'transparent',
+                        bg: '#ffffffa3',
                         opacity: 0.6
                       }}
-                      onPress={() => navigation.navigate('Home' as never)}
+                      onPress={() => navigation.navigate('HomeNavigation' as never)}
                     />
                   )
                 }
