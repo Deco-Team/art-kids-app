@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native'
 import { AspectRatio, Box, Center, HStack, Heading, Image, Pressable, Stack, Text } from 'native-base'
-import { ICourse } from '../interfaces/course.interface'
+import { ICourse, CourseType } from '../business/course/course'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import useCourse from '../hooks/api/useCourseApi'
+import useAuth from '../hooks/useAuth'
 
 interface CourseCardProps {
   data: ICourse
@@ -9,10 +11,30 @@ interface CourseCardProps {
 
 const CourseCard = ({ data }: CourseCardProps) => {
   const navigation = useNavigation()
+  const { idToken } = useAuth()
   const durationInHour =
     Math.floor(data.duration / 60) +
     (Math.floor(data.duration / 60) == 1 ? ' hour ' : ' hours ') +
     (data.duration % 60 > 0 ? (data.duration % 60) + ' mins' : '')
+
+  const { getMyCourseDetail } = useCourse()
+
+  const checkCoursePurchase = async () => {
+    try {
+      if (idToken) {
+        const response = await getMyCourseDetail(data._id)
+        if (response) {
+          navigation.navigate('MyCourseDetails', { id: data._id })
+        } else {
+          navigation.navigate('Details', { id: data._id })
+        }
+      } else {
+        navigation.navigate('Details', { id: data._id })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <Box alignItems='center' style={{ marginBottom: 20 }}>
@@ -26,7 +48,7 @@ const CourseCard = ({ data }: CourseCardProps) => {
           backgroundColor: 'coolGray.50'
         }}
         _pressed={{ opacity: 0.8 }}
-        onPress={() => navigation.navigate('Details', { id: data._id })}
+        onPress={() => checkCoursePurchase()}
       >
         <Box>
           <AspectRatio w='100%' ratio={16 / 9}>
@@ -69,7 +91,7 @@ const CourseCard = ({ data }: CourseCardProps) => {
                 <MaterialCommunityIcons name='timer-sand' size={18} color='black' />
                 {durationInHour}
               </Text>
-              {data.type === 'PAID' && (
+              {data.type === CourseType.PAID && (
                 <Text color='black' fontWeight='bold' fontSize={'2xl'}>
                   {Intl.NumberFormat('en-DE').format(data.price) + ' ₫'}
                 </Text>

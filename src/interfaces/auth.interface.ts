@@ -3,6 +3,7 @@ import { IUser } from './user.interface'
 export interface IAuthContextProps {
   user: IUser | undefined
   idToken: string | null
+  refreshToken: string | null
   login: ({ email, password }: ILoginFormProps) => Promise<boolean>
   logout: () => Promise<void>
 }

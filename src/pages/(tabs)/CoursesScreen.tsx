@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import useCourse from '@/src/hooks/api/useCourseApi'
-import { ICourse } from '@/src/interfaces/course.interface'
+import { ICourse, CourseType } from '@/src/business/course/course'
 import { IPagination } from '@/src/interfaces/pagination.interface'
 import CourseCard from '@/src/components/CourseCard'
 
@@ -42,29 +42,18 @@ const CoursesScreen = ({ route }: any) => {
   }
 
   useEffect(() => {
-    setIsLoading(true)
-    getAllData()
-    setIsLoading(false)
-  }, [type, courseType])
-
-  useEffect(() => {
     if (courseType) {
       setType(courseType)
     }
-  }, [courseType])
+    getAllData()
+  }, [courseType, type])
 
   return (
     <SafeAreaView style={{ flex: 1, padding: 20, backgroundColor: '#fff' }}>
       <Box alignItems='center'>
         <Actionsheet isOpen={isOpen} onClose={onClose}>
           <Actionsheet.Content>
-            <Box w='100%' h={60} px={4} justifyContent='center'>
-              <Text fontSize='16' color='gray.500'>
-                Albums
-              </Text>
-            </Box>
             <Actionsheet.Item>Delete</Actionsheet.Item>
-            <Actionsheet.Item isDisabled>Share</Actionsheet.Item>
             <Actionsheet.Item>Play</Actionsheet.Item>
             <Actionsheet.Item>Favourite</Actionsheet.Item>
             <Actionsheet.Item>Cancel</Actionsheet.Item>
@@ -114,23 +103,23 @@ const CoursesScreen = ({ route }: any) => {
         <Button
           borderRadius={'full'}
           style={{ width: 70, marginHorizontal: 20 }}
-          variant={type === 'FREE' ? 'solid' : 'outline'}
+          variant={type === CourseType.FREE ? 'solid' : 'outline'}
           colorScheme={'blue'}
-          disabled={type === 'FREE'}
-          onPress={() => setType('FREE')}
-          _text={{ color: type === 'FREE' ? 'white' : '#858597', fontSize: 14 }}
+          disabled={type === CourseType.FREE}
+          onPress={() => setType(CourseType.FREE)}
+          _text={{ color: type === CourseType.FREE ? 'white' : '#858597', fontSize: 14 }}
         >
           Free
         </Button>
         <Button
           borderRadius={'full'}
           style={{ width: 70 }}
-          variant={type === 'PAID' ? 'solid' : 'outline'}
+          variant={type === CourseType.PAID ? 'solid' : 'outline'}
           colorScheme={'blue'}
-          disabled={type === 'PAID'}
-          onPress={() => setType('PAID')}
-          color={type === 'PAID' ? 'white' : '#858597'}
-          _text={{ color: type === 'PAID' ? 'white' : '#858597', fontSize: 14 }}
+          disabled={type === CourseType.PAID}
+          onPress={() => setType(CourseType.PAID)}
+          color={type === CourseType.PAID ? 'white' : '#858597'}
+          _text={{ color: type === CourseType.PAID ? 'white' : '#858597', fontSize: 14 }}
         >
           Paid
         </Button>

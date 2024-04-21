@@ -27,7 +27,9 @@ const useApi = () => {
         }
       }
       if (message) {
-        console.log(message)
+        return message
+      } else {
+        throw error
       }
     },
     [logout]
@@ -49,9 +51,15 @@ const useApi = () => {
    * @throws Will throw an error if the API call fails.
    */
   const callApi = useCallback(
-    async <T>(method: string, endpoint: string, headers = {}, params = {}, body = {}): Promise<{ data: T }> => {
+    async <T>(
+      method: string,
+      endpoint: string,
+      headers = {},
+      params = {},
+      body = {}
+    ): Promise<{ data: T | null } & { error?: string, message?: string}> => {
       try {
-        const headersDefault = { accept: 'application/json', Authorization: `Bearer ${idToken}`, ...headers }
+        const headersDefault = { Accept: 'application/json', Authorization: `Bearer ${idToken}`, ...headers }
         let response
         switch (method) {
           case 'post': {
@@ -74,9 +82,10 @@ const useApi = () => {
             response = await GET(endpoint, params, headersDefault)
           }
         }
-        return response
+        return response.data
       } catch (error) {
-        throw handleError(error)
+        const message = await handleError(error)
+        return { data: null, error: 'API Error', message }
       }
     },
     [handleError, idToken]
