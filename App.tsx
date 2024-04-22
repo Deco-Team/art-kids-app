@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { IconButton, NativeBaseProvider } from 'native-base'
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { LinkingOptions, NavigationContainer, ParamListBase, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DetailsScreen from './src/pages/DetailsScreen'
 import LoginScreen from './src/pages/(authentication)/LoginScreen'
@@ -12,13 +12,32 @@ import AuthProvider from './src/contexts/AuthContext'
 import 'core-js/stable/atob'
 import CustomerInfoScreen from './src/pages/(tabs)/CustomerInfoScreen'
 import { Text } from 'react-native'
+import * as Linking from 'expo-linking'
 
 const Stack = createNativeStackNavigator()
+const prefix = Linking.createURL('/')
+
+const linking = {
+  prefixes: [prefix],
+  config: {
+    screens: {
+      HomeNavigation: {
+        screens: {
+          Home: 'home',
+          Courses: 'courses',
+          Customer: 'customer'
+        }
+      },
+      Details: 'details',
+      OrderStatus: 'order-status'
+    }
+  }
+} as LinkingOptions<ParamListBase>
 
 export default function App({ route }: any) {
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
+      <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
         <AuthProvider>
           <Stack.Navigator
             screenOptions={{
