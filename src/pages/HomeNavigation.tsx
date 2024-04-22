@@ -2,15 +2,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import HomeScreen from './(tabs)/HomeScreen'
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons'
-import CustomerInfoScreen from './(tabs)/CustomerInfoScreen'
 import CoursesScreen from './(tabs)/CoursesScreen'
-import { useNavigation } from '@react-navigation/native'
 import useAuth from '../hooks/useAuth'
+import CustomerInfoScreen from './(tabs)/CustomerInfoScreen'
 
 const Tab = createBottomTabNavigator()
 
-const HomeNavigation = () => {
-  const navigation = useNavigation()
+const HomeNavigation = ({ navigation }: any) => {
   const { idToken } = useAuth()
   return (
     <Tab.Navigator
@@ -48,7 +46,7 @@ const HomeNavigation = () => {
         name='Customer'
         component={CustomerInfoScreen}
         options={{
-          tabBarIcon: ({ color }) => <FontAwesome6 name='user-large' size={24} color={color} />
+          tabBarIcon: ({ color }) => <Ionicons name='person' size={24} color={color} />
         }}
         listeners={{
           tabPress: (e) => {

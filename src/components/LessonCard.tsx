@@ -1,7 +1,7 @@
 import { IconButton, Pressable } from 'native-base'
 import { Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { ILesson } from '../interfaces/course.interface'
+import { ILesson, CourseType } from '../business/course/course'
 
 interface LessonCardProps {
   isPLaying: boolean
@@ -9,6 +9,7 @@ interface LessonCardProps {
   data: ILesson | undefined
   buttonIsPlaying: boolean
   tooglePlaying: () => void
+  fromMyCourse?: boolean
 }
 
 const LessonCard = (data: LessonCardProps) => {
@@ -44,7 +45,7 @@ const LessonCard = (data: LessonCardProps) => {
         style={{ aspectRatio: 1, width: 44, alignItems: 'center', justifyContent: 'center' }}
         onPress={() => data.tooglePlaying()}
         icon={
-          data.data?.type === 'PAID' ? (
+          data.data?.type === CourseType.PAID && !data.fromMyCourse ? (
             <Ionicons name='lock-closed' size={24} color='white' />
           ) : data.buttonIsPlaying && data.isPLaying ? (
             <Ionicons name='pause' color='white' size={16} />

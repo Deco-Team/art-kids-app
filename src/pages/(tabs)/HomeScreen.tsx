@@ -6,7 +6,7 @@ import Carousel from 'react-native-reanimated-carousel'
 import CourseCard from '@/src/components/CourseCard'
 import useCourse from '@/src/hooks/api/useCourseApi'
 import { IPagination } from '@/src/interfaces/pagination.interface'
-import { ICourse } from '@/src/interfaces/course.interface'
+import { ICourse, CourseType } from '@/src/business/course/course'
 import { Ionicons } from '@expo/vector-icons'
 
 const HomeScreen = ({ navigation }: any) => {
@@ -38,7 +38,7 @@ const HomeScreen = ({ navigation }: any) => {
 
   const getAllData = async () => {
     try {
-      const response = await Promise.all([getCourses(1, 3, 'FREE'), getCourses(1, 3, 'PAID')])
+      const response = await Promise.all([getCourses(1, 3, CourseType.FREE), getCourses(1, 3, CourseType.PAID)])
       if (response) {
         setFreeCourses(response[0] || initialData)
         setPaidCourses(response[1] || initialData)
@@ -112,7 +112,7 @@ const HomeScreen = ({ navigation }: any) => {
           padding: 20,
           paddingBottom: 20
         }}
-        onPress={() => navigation.navigate('Courses', { courseType: 'FREE' })}
+        onPress={() => navigation.navigate('Courses', { courseType: CourseType.FREE })}
       >
         <Text style={{ fontSize: 24, fontWeight: '500' }}>Free courses</Text>
         <Ionicons name='arrow-forward' size={24} color='black' />
@@ -132,7 +132,7 @@ const HomeScreen = ({ navigation }: any) => {
           padding: 20,
           paddingBottom: 20
         }}
-        onPress={() => navigation.navigate('Courses', { courseType: 'PAID' })}
+        onPress={() => navigation.navigate('Courses', { courseType: CourseType.PAID })}
       >
         <Text style={{ fontSize: 24, fontWeight: '500' }}>Paid courses</Text>
         <Ionicons name='arrow-forward' size={24} color='black' />

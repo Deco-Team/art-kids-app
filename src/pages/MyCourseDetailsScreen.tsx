@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import useCourse from '../hooks/api/useCourseApi'
-import { ICourse, ILesson, CourseType } from '../business/course/course'
-import { ResizeMode, Video } from 'expo-av'
+import { ICourse, ILesson } from '../interfaces/course.interface'
+import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av'
 import LessonCard from '../components/LessonCard'
 import { Button, Pressable } from 'native-base'
 import { usePreventScreenCapture } from 'expo-screen-capture'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import { useNavigation } from '@react-navigation/native'
-import { useCheckoutStore } from '../app/stores/checkout/useCheckoutStore'
+import { set } from 'react-hook-form'
 
-const DetailsScreen = ({ route }: any) => {
+const MyCourseDetailsScreen = ({ route }: any) => {
   usePreventScreenCapture()
-  const navigation = useNavigation()
-  const checkout = useCheckoutStore((state) => state.checkout)
 
   const { id } = route.params
-  const { getCourseDetail } = useCourse()
+  const { getMyCourseDetail, completeLesson } = useCourse()
 
   const video = React.useRef(null)
   const [data, setData] = useState<ICourse>({} as ICourse)
   const [activeLesson, setActiveLesson] = useState<ILesson>({ video: '' } as ILesson)
   const [isPlaying, setIsPlaying] = useState(false)
   const [, setIsFullScreen] = useState(0)
+  const [isCompleted, setIsCompleted] = useState(false)
 
   function togglePlaying() {
     if (isPlaying) {
@@ -37,12 +35,24 @@ const DetailsScreen = ({ route }: any) => {
 
   const getAllData = async () => {
     try {
-      const response = await getCourseDetail(id)
+      const response = await getMyCourseDetail(id)
       if (response) {
         setData(response)
       }
     } catch (error) {
-      console.error()
+      console.error(error)
+    }
+  }
+
+  const handleVideoEnd = async () => {
+    try {
+      if (activeLesson.video !== '') {
+        if (data.lessons && data.lessons.indexOf(activeLesson) >= 0) {
+          await completeLesson(id, data.lessons.indexOf(activeLesson))
+        }
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -79,8 +89,12 @@ const DetailsScreen = ({ route }: any) => {
           setIsFullScreen(fullscreenUpdate)
         }}
         onPlaybackStatusUpdate={(status: any) => {
+          if (status.didJustFinish) {
+            handleVideoEnd()
+          }
           setIsPlaying(status.isPlaying)
         }}
+        // progressUpdateIntervalMillis={videoLength - 5000}
       />
       <ScrollView style={styles.scrollView} bounces={false}>
         <View style={{ marginBottom: 16 }}>
@@ -95,40 +109,18 @@ const DetailsScreen = ({ route }: any) => {
         </View>
         <View style={{ marginBottom: 60 }}>
           {data.lessons?.map((lesson, index) => (
-            <Pressable
-              key={index}
-              _pressed={{ opacity: 0.6 }}
-              paddingY={2}
-              _disabled={{ opacity: 0.6 }}
-              disabled={lesson.type === CourseType.PAID}
-              onPress={() => setActiveLesson(lesson)}
-            >
+            <Pressable key={index} _pressed={{ opacity: 0.6 }} paddingY={2} onPress={() => setActiveLesson(lesson)}>
               <LessonCard
                 data={lesson}
                 index={index}
                 isPLaying={lesson === activeLesson}
                 buttonIsPlaying={isPlaying}
                 tooglePlaying={togglePlaying}
+                fromMyCourse={true}
               />
             </Pressable>
           ))}
         </View>
-        {data.type === CourseType.PAID ? (
-          <Button
-            backgroundColor='#3D5CFF'
-            variant='solid'
-            borderRadius='md'
-            _pressed={{ opacity: 0.6 }}
-            onPress={() => {
-              checkout(data)
-              navigation.navigate('Checkout')
-            }}
-          >
-            Buy now
-          </Button>
-        ) : (
-          <></>
-        )}
       </ScrollView>
     </SafeAreaView>
   )
@@ -144,4 +136,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DetailsScreen
+export default MyCourseDetailsScreen

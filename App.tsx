@@ -10,12 +10,15 @@ import { Ionicons } from '@expo/vector-icons'
 import LoginRegisterScreen from './src/pages/(authentication)/LoginRegisterScreen'
 import AuthProvider from './src/contexts/AuthContext'
 import 'core-js/stable/atob'
-import CustomerInfoScreen from './src/pages/(tabs)/CustomerInfoScreen'
 import { Text } from 'react-native'
+import CheckoutScreen from './src/pages/(customer)/order/CheckoutScreen'
+import MyCourseScreen from './src/pages/MyCourseScreen'
+import MyCourseDetailsScreen from './src/pages/MyCourseDetailsScreen'
+import OrderStatusScreen from './src/pages/(customer)/order/OrderStatusScreen'
 
 const Stack = createNativeStackNavigator()
 
-export default function App({ route }: any) {
+export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
@@ -72,7 +75,6 @@ export default function App({ route }: any) {
                 headerTransparent: true
               }}
             />
-            <Stack.Screen name='Info' component={CustomerInfoScreen} />
             <Stack.Screen
               name='LoginRegister'
               component={LoginRegisterScreen}
@@ -111,7 +113,7 @@ export default function App({ route }: any) {
                         bg: '#ffffffa3',
                         opacity: 0.6
                       }}
-                      onPress={() => navigation.navigate('HomeNavigation' as never)}
+                      onPress={() => navigation.navigate('HomeNavigation')}
                     />
                   )
                 }
@@ -133,10 +135,98 @@ export default function App({ route }: any) {
                         bg: '#ffffffa3',
                         opacity: 0.6
                       }}
-                      onPress={() => navigation.navigate('HomeNavigation' as never)}
+                      onPress={() => navigation.navigate('HomeNavigation')}
                     />
                   )
                 }
+              }}
+            />
+            <Stack.Screen
+              name='Checkout'
+              component={CheckoutScreen}
+              options={{
+                presentation: 'fullScreenModal',
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.goBack()}
+                    />
+                  )
+                }
+              }}
+            />
+            <Stack.Screen
+              name='OrderStatus'
+              component={OrderStatusScreen}
+              options={{
+                presentation: 'fullScreenModal',
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.navigate('HomeNavigation')}
+                    />
+                  )
+                }
+              }}
+            />
+            <Stack.Screen
+              name='MyCourse'
+              component={MyCourseScreen}
+              options={{
+                presentation: 'fullScreenModal',
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.goBack()}
+                    />
+                  )
+                }
+              }}
+            />
+            <Stack.Screen
+              name='MyCourseDetails'
+              component={MyCourseDetailsScreen}
+              options={{
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.goBack()}
+                    />
+                  )
+                },
+                headerTransparent: true
               }}
             />
           </Stack.Navigator>
