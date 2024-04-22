@@ -10,25 +10,20 @@ import * as Linking from 'expo-linking'
 const CheckoutScreen = () => {
   const { user } = useAuth()
   const navigation = useNavigation()
-  const { course, isCompleted, isSuccess, orderSuccess, orderFail } = useCheckoutStore()
+  const course = useCheckoutStore((state) => state.course)
+  const isCompleted = useCheckoutStore((state) => state.isCompleted)
+  const orderFail = useCheckoutStore((state) => state.orderFail)
   const { createOrder } = useOrder()
 
   const sendOrder = async (courseId: string) => {
     log.info('Order sent')
     const response = await createOrder(courseId)
 
-    log.debug('Order response', JSON.stringify(response))
     if (response) {
-      const openLinkRs = await Linking.openURL(response.deeplink)
-      if (!openLinkRs) {
-        log.error('Open link failed')
-        orderFail()
-      }
-      // orderSuccess()
+      await Linking.openURL(response.deeplink)
     } else {
       orderFail()
     }
-    // navigation.navigate('OrderStatus')
   }
 
   if (!user) {

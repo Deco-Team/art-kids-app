@@ -1,12 +1,24 @@
 import { useCheckoutStore } from '@/src/app/stores/checkout/useCheckoutStore'
 import { useNavigation } from '@react-navigation/native'
 import { Button, Image, Text, View } from 'native-base'
+import { useEffect } from 'react'
 
-const OrderStatusScreen = () => {
-  const isSuccess = useCheckoutStore((state) => state.isSuccess)
-  const course = useCheckoutStore((state) => state.course)
+const OrderStatusScreen = ({ route }: any) => {
+  const { course, isSuccess, isCompleted, orderSuccess, orderFail } = useCheckoutStore()
   const navigation = useNavigation()
-  return (
+  const params = route.params
+
+  useEffect(() => {
+    if (!isCompleted) {
+      if (params.resultCode === '0') {
+        orderSuccess()
+      } else {
+        orderFail()
+      }
+    }
+  }, [])
+
+  return isCompleted ? (
     <View
       style={{
         flex: 1,
@@ -34,12 +46,14 @@ const OrderStatusScreen = () => {
         borderRadius='lg'
         _pressed={{ opacity: 0.8 }}
         onPress={() => {
-          isSuccess ? navigation.navigate('HomeNavigation') : navigation.navigate('Details', { id: course?._id })
+          !isSuccess ? navigation.navigate('HomeNavigation') : navigation.navigate('MyCourseDetails', { id: course?._id })
         }}
       >
-        Start learning
+        {!isSuccess ? 'Home' : 'Start learning'}
       </Button>
     </View>
+  ) : (
+    <></>
   )
 }
 
