@@ -1,7 +1,13 @@
+import useAuth from '@/src/hooks/useAuth'
 import { Button, IconButton } from 'native-base'
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 
 const LoginRegisterScreen = ({ navigation }: any) => {
+  const { idToken } = useAuth()
+
+  if (idToken) {
+    navigation.reset({ index: 0, routes: [{ name: 'HomeNavigation' }] })
+  }
   return (
     <SafeAreaView style={style.view}>
       <Image style={style.image} source={require('../../../assets/illustration.png')} />
