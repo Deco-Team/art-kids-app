@@ -5,6 +5,7 @@ import { log } from '@/src/utils/logger.util'
 import useOrder from '@/src/hooks/api/useOrderApi'
 import useAuth from '@/src/hooks/useAuth'
 import { useNavigation } from '@react-navigation/native'
+import * as Linking from 'expo-linking'
 
 const CheckoutScreen = () => {
   const { user } = useAuth()
@@ -16,12 +17,18 @@ const CheckoutScreen = () => {
     log.info('Order sent')
     const response = await createOrder(courseId)
 
-    if (response && response.success) {
-      orderSuccess()
+    log.debug('Order response', JSON.stringify(response))
+    if (response) {
+      const openLinkRs = await Linking.openURL(response.deeplink)
+      if (!openLinkRs) {
+        log.error('Open link failed')
+        orderFail()
+      }
+      // orderSuccess()
     } else {
       orderFail()
     }
-    navigation.navigate('OrderStatus')
+    // navigation.navigate('OrderStatus')
   }
 
   if (!user) {
