@@ -9,6 +9,7 @@ interface LessonCardProps {
   data: ILesson | undefined
   buttonIsPlaying: boolean
   tooglePlaying: () => void
+  setActiveLesson: (lesson: ILesson) => void
   fromMyCourse?: boolean
 }
 
@@ -43,7 +44,10 @@ const LessonCard = (data: LessonCardProps) => {
         borderRadius={'full'}
         _pressed={{ opacity: 0.6 }}
         style={{ aspectRatio: 1, width: 44, alignItems: 'center', justifyContent: 'center' }}
-        onPress={() => data.tooglePlaying()}
+        onPress={() => {
+          data.setActiveLesson(data.data as ILesson)
+          data.tooglePlaying()
+        }}
         icon={
           data.data?.type === CourseType.PAID && !data.fromMyCourse ? (
             <Ionicons name='lock-closed' size={24} color='white' />

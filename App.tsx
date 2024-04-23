@@ -16,6 +16,7 @@ import CheckoutScreen from './src/pages/(customer)/order/CheckoutScreen'
 import MyCourseScreen from './src/pages/MyCourseScreen'
 import MyCourseDetailsScreen from './src/pages/MyCourseDetailsScreen'
 import OrderStatusScreen from './src/pages/(customer)/order/OrderStatusScreen'
+import OrderHistoryScreen from './src/pages/OrderHistoryScreen'
 
 const Stack = createNativeStackNavigator()
 const prefix = Linking.createURL('/')
@@ -246,6 +247,28 @@ export default function App() {
                   )
                 },
                 headerTransparent: true
+              }}
+            />
+            <Stack.Screen
+              name='OrderHistory'
+              component={OrderHistoryScreen}
+              options={{
+                presentation: 'fullScreenModal',
+                headerLeft: () => {
+                  const navigation = useNavigation()
+                  return (
+                    <IconButton
+                      backgroundColor={'#ffffffa3'}
+                      icon={<Ionicons name='arrow-back-outline' size={24} color='black' />}
+                      borderRadius={'full'}
+                      _pressed={{
+                        bg: '#ffffffa3',
+                        opacity: 0.6
+                      }}
+                      onPress={() => navigation.goBack()}
+                    />
+                  )
+                }
               }}
             />
           </Stack.Navigator>

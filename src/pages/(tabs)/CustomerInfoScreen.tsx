@@ -41,6 +41,7 @@ const CustomerInfoScreen = () => {
             paddingHorizontal: 20,
             paddingVertical: 10
           }}
+          onPress={() => navigation.navigate('OrderHistory')}
         >
           <Text style={{ fontSize: 20, fontWeight: '500' }}>Purchase history</Text>
           <Ionicons name='arrow-forward-outline' size={24} color='black' />

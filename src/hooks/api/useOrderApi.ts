@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import useApi from './useApi'
 import { log } from '@/src/utils/logger.util'
 import { AxiosError } from 'axios'
+import { IOrderHistory } from '@/src/business/course/course'
+import { IPagination } from '@/src/interfaces/pagination.interface'
 
 const useOrder = () => {
   const callApi = useApi()
@@ -39,9 +41,16 @@ const useOrder = () => {
     [callApi]
   )
 
-  return {
-    createOrder
-  }
+  const getOrderHistory = useCallback(async () => {
+    try {
+      const response = await callApi<IPagination<IOrderHistory>>('get', endpoint)
+      return response.data
+    } catch (error) {
+      console.error('error Orders ' + error)
+    }
+  }, [callApi])
+
+  return { createOrder, getOrderHistory }
 }
 
 export default useOrder
