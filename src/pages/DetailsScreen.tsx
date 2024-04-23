@@ -109,6 +109,7 @@ const DetailsScreen = ({ route }: any) => {
                 isPLaying={lesson === activeLesson}
                 buttonIsPlaying={isPlaying}
                 tooglePlaying={togglePlaying}
+                setActiveLesson={setActiveLesson}
               />
             </Pressable>
           ))}

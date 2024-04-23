@@ -36,3 +36,26 @@ export interface ILesson {
   type: string
   isCompleted?: boolean
 }
+
+export interface IOrderHistory {
+  _id: string
+  orderNumber: string
+  items: {
+    course: ICourse
+    price: number
+  }[]
+  totalAmount: number
+  orderDate: Date
+  orderStatus: string
+  transactionStatus: string
+  payment: {
+    transactionStatus: string
+    transaction: {
+      partnerCode: string
+      orderId: string
+    }
+    paymentMethod: string
+  }
+  createdAt: Date
+  updatedAt: Date
+}

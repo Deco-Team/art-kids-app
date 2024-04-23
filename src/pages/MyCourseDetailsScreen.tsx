@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import useCourse from '../hooks/api/useCourseApi'
-import { ICourse, ILesson } from '../interfaces/course.interface'
-import { AVPlaybackStatus, ResizeMode, Video } from 'expo-av'
+import { ICourse, ILesson } from '../business/course/course'
+import { ResizeMode, Video } from 'expo-av'
 import LessonCard from '../components/LessonCard'
-import { Button, Pressable } from 'native-base'
+import { Pressable } from 'native-base'
 import { usePreventScreenCapture } from 'expo-screen-capture'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import { set } from 'react-hook-form'
 
 const MyCourseDetailsScreen = ({ route }: any) => {
   usePreventScreenCapture()
@@ -116,6 +115,7 @@ const MyCourseDetailsScreen = ({ route }: any) => {
                 isPLaying={lesson === activeLesson}
                 buttonIsPlaying={isPlaying}
                 tooglePlaying={togglePlaying}
+                setActiveLesson={setActiveLesson}
                 fromMyCourse={true}
               />
             </Pressable>
